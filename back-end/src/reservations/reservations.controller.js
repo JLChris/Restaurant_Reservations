@@ -27,23 +27,36 @@ function hasRequiredFields(req, res, next) {
   });
 }
 
-function validDate(req, res, next) {
+function validDateAndTime(req, res, next) {
   const errors = [];
   const reservation = res.locals.reservation;
   const date = new Date(`${reservation.reservation_date}T${reservation.reservation_time}`);
   const today = new Date();
   if (date.getUTCDay() === 2) {
-    errors.push("The restaurant is closed on Tuesdays.");
+    errors.push("The restaurant is closed on Tuesdays. Please pick a different day.");
   }
   if (date - today < 0) {
     errors.push("Cannot book a past date.")
   }
+  if (date.getHours() <= 10) {
+    if (date.getHours() === 10 && date.getMinutes() < 30) {
+      errors.push("Restaurant opens at 10:30am. Please pick a later time.");
+    }
+    errors.push("Restaurant opens at 10:30am. Please pick a later time.");
+  }
+  if (date.getHours() >= 21) {
+    if (date.getHours() === 21 && date.getMinutes() > 30) {
+      errors.push("Restaurant closes at 10:30pm. We would like you to have time to enjoy your meal. Please pick an earlier time.");
+    }
+    errors.push("Restaurant closes at 10:30pm. We would like you to have time to enjoy your meal. Please pick an earlier time.");
+  }
+  console.log(date.getHours(), date.getMinutes());
   if (errors.length === 0) {
     return next();
   }
   next({
     status: 400,
-    message: `${errors.join(" ")} Please pick a different day.`
+    message: `${errors.join(" ")}`
   });
 }
 
@@ -61,5 +74,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasRequiredFields, validDate, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, validDateAndTime, asyncErrorBoundary(create)],
 };
