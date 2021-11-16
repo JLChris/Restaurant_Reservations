@@ -14,10 +14,8 @@ async function list(req, res) {
 
 async function update(req, res) {
     const tableId = req.params.table_id;
-    const reservationId = parseInt(req.body.data.reservation_id);
-    console.log(reservationId);
-    console.log(tableId);
-    await service.update(tableId, reservationId);
+    const params = req.body.data;
+    await service.update(tableId, params);
     res.status(201).json({});
 }
 

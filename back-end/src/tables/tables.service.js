@@ -10,12 +10,11 @@ function list() {
         .orderBy("table_name");
 }
 
-function update(tableId, reservationId) {
+function update(tableId, params) {
     return knex("tables")
         .where({ "table_id": tableId })
         .update({
-            reservation_id: reservationId,
-            status: "Occupied"
+            ...params
         });
 }
 

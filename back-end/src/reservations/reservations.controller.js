@@ -91,8 +91,8 @@ function read(req, res) {
 
 async function update(req, res) {
   const resId = res.locals.foundReservation.reservation_id;
-  const status = req.body.data.status;
-  await service.update(resId, status);
+  const params = req.body.data;
+  await service.update(resId, params);
   res.sendStatus(201);
 }
 

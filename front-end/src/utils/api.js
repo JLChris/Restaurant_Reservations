@@ -6,7 +6,7 @@ import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:5002";
 
 /**
  * Defines the default headers for these functions to work with `json-server`
@@ -94,23 +94,23 @@ export async function readReservation(id, signal) {
   return await fetchJson(url, { headers, signal }, {});
 }
 
-export async function updateTable(tableId, reservationId, signal) {
+export async function updateTable(tableId, params, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options);
 }
 
-export async function updateReservation(resId, newStatus, signal) {
+export async function updateReservation(resId, params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${resId}/status`);
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: { status: newStatus } }),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options);

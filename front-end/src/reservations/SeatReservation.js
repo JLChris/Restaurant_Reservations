@@ -38,9 +38,9 @@ function SeatReservation({ tables }) {
             setError({ message: `${table.table_name} cannot accommodate party size. Please pick a different table.` })
         }
         else {
-            updateTable(table.table_id, reservationId)
+            updateTable(table.table_id, { reservation_id: reservationId, status: "Occupied" })
                 .then(() => {
-                    updateReservation(reservationId, "seated");
+                    updateReservation(reservationId, { status: "seated" });
                 })
                 .then(() => {
                     history.push("/dashboard");

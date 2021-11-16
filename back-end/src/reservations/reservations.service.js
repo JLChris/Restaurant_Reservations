@@ -18,11 +18,11 @@ function read(resId) {
         .first();
 }
 
-function update(resId, newStatus) {
+function update(resId, params) {
     return knex("reservations")
         .where({ "reservation_id": resId })
         .update({
-            status: newStatus
+            ...params
         });
 }
 

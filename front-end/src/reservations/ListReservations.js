@@ -1,7 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
-import { updateReservation } from "../utils/api";
 
 function ListReservations({ reservations, date }) {
     const history = useHistory();
