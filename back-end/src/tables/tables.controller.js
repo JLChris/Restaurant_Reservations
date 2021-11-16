@@ -1,6 +1,5 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { as } = require("../db/connection");
 
 async function create(req, res) {
     const tableData = req.body.data;
@@ -13,7 +12,17 @@ async function list(req, res) {
     res.json({ data: tables });
 }
 
+async function update(req, res) {
+    const tableId = req.params.table_id;
+    const reservationId = parseInt(req.body.data.reservation_id);
+    console.log(reservationId);
+    console.log(tableId);
+    await service.update(tableId, reservationId);
+    res.status(201).json({});
+}
+
 module.exports = {
     create: asyncErrorBoundary(create),
-    list: asyncErrorBoundary(list)
+    list: asyncErrorBoundary(list),
+    update: asyncErrorBoundary(update)
 }

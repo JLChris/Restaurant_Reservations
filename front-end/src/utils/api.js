@@ -89,6 +89,33 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options);
 }
 
+export async function readReservation(id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${id}`);
+  return await fetchJson(url, { headers, signal }, {});
+}
+
+export async function updateTable(tableId, reservationId, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function updateReservation(resId, newStatus, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${resId}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: newStatus } }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
 /**
  * Creates a new table.
  * @returns {Promise<[resolve]>}

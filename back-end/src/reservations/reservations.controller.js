@@ -50,13 +50,25 @@ function validDateAndTime(req, res, next) {
     }
     errors.push("Restaurant closes at 10:30pm. We would like you to have time to enjoy your meal. Please pick an earlier time.");
   }
-  console.log(date.getHours(), date.getMinutes());
   if (errors.length === 0) {
     return next();
   }
   next({
     status: 400,
     message: `${errors.join(" ")}`
+  });
+}
+
+async function reservationExists(req, res, next) {
+  const resId = req.params.reservation_id;
+  const reservation = await service.read(resId);
+  if (reservation) {
+    res.locals.foundReservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Could not find reservation matching id: ${resId}`
   });
 }
 
@@ -72,7 +84,21 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+function read(req, res) {
+  const reservation = res.locals.foundReservation;
+  res.json({ data: reservation });
+}
+
+async function update(req, res) {
+  const resId = res.locals.foundReservation.reservation_id;
+  const status = req.body.data.status;
+  await service.update(resId, status);
+  res.sendStatus(201);
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [hasRequiredFields, validDateAndTime, asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), read],
+  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)]
 };
