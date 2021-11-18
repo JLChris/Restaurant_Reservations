@@ -1,10 +1,9 @@
 import React from "react";
-import { updateTable, updateReservation } from "../utils/api";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { updateTable, updateReservation, listTables } from "../utils/api";
+import { useHistory } from "react-router-dom";
 
 function ListTables({ tables, reservations }) {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
     const finishTable = (table) => {
         const reservation = reservations.find(r => table.reservation_id === r.reservation_id);
@@ -16,7 +15,7 @@ function ListTables({ tables, reservations }) {
                     updateReservation(reservation.reservation_id, { status: "finished" });
                 })
                 .then(() => {
-                    history.push(`${url}`);
+                    history.go();
                 })
                 .catch(console.log);
         }
@@ -35,7 +34,9 @@ function ListTables({ tables, reservations }) {
                                         type="button"
                                         className="btn btn-secondary"
                                         data-table-id-finish={t.table_id}
-                                        onClick={finishTable(t)}
+                                        onClick={() => {
+                                            finishTable(t)
+                                        }}
                                     >Finish</button>
                                     : ""
                                 }

@@ -17,17 +17,17 @@ import { listTables } from "../utils/api";
  * @returns {JSX.Element}
  */
 function Routes() {
-  const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
+  // const [tables, setTables] = useState([]);
+  // const [tablesError, setTablesError] = useState(null);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    setTablesError(null);
-    listTables(abortController.signal)
-      .then(setTables)
-      .catch(setTablesError);
-    return () => abortController.abort();
-  }, []);
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   setTablesError(null);
+  //   listTables(abortController.signal)
+  //     .then(setTables)
+  //     .catch(setTablesError);
+  //   return () => abortController.abort();
+  // }, []);
 
 
   return (
@@ -38,17 +38,17 @@ function Routes() {
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
+      <Route path="/reservations/:reservation_id/seat">
+        <Dashboard date={today()} />
+      </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} tables={tables} tablesError={tablesError} />
+        <Dashboard date={today()} />
       </Route>
       <Route path="/reservations/new">
         <NewReservation />
       </Route>
       <Route path="/tables/new">
         <AddTable />
-      </Route>
-      <Route path="/reservations/:reservation_id/seat">
-        <SeatReservation tables={tables} />
       </Route>
 
       <Route>

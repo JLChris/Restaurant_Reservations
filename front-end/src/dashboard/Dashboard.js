@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { useLocation, Route, Switch } from "react-router-dom";
+import { listReservations, listTables } from "../utils/api";
 import ListReservations from "../reservations/ListReservations";
 import ListTables from "../tables/ListTables";
 import ErrorAlert from "../layout/ErrorAlert";
+import SeatReservation from "../reservations/SeatReservation";
 
 /**
  * Defines the dashboard page.
@@ -16,9 +17,11 @@ function _useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-function Dashboard({ date, tables, tablesError }) {
+function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   const query = _useQuery();
 
   if (query.get("date")) {
@@ -30,23 +33,35 @@ function Dashboard({ date, tables, tablesError }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    setTablesError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }
 
   return (
-    <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: {date}</h4>
-      </div>
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
-      <ListReservations reservations={reservations} date={date} />
-      <ListTables tables={tables} reservations={reservations} />
-    </main>
+    <Switch>
+      <Route exact={true} path="/dashboard">
+        <main>
+          <h1>Dashboard</h1>
+          <div className="d-md-flex mb-3">
+            <h4 className="mb-0">Reservations for date: {date}</h4>
+          </div>
+          <ErrorAlert error={reservationsError} />
+          <ErrorAlert error={tablesError} />
+          <ListReservations reservations={reservations} date={date} />
+          <ListTables tables={tables} reservations={reservations} />
+        </main>
+      </Route>
+      <Route path="/reservations/:reservation_id/seat">
+        <SeatReservation tables={tables} date={date} />
+      </Route>
+    </Switch>
+
   );
 }
 

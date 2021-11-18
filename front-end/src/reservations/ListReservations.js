@@ -4,13 +4,14 @@ import { previous, next } from "../utils/date-time";
 
 function ListReservations({ reservations, date }) {
     const history = useHistory();
+    const activeReservations = reservations.filter(r => r.status !== "finished");
 
     return (
         <main>
-            {reservations.length === 0 ?
+            {activeReservations.length === 0 ?
                 <h5>There are no reservations for this date</h5> :
                 <ol>
-                    {reservations.map(r => {
+                    {activeReservations.map(r => {
                         return (
                             <li key={r.reservation_id}>
                                 <p>{r.first_name} {r.last_name}</p>
