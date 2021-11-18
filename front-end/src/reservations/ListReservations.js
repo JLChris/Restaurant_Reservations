@@ -1,17 +1,15 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { previous, next } from "../utils/date-time";
 
-function ListReservations({ reservations, date }) {
-    const history = useHistory();
-    const activeReservations = reservations.filter(r => r.status !== "finished");
+
+function ListReservations({ reservations }) {
+    // const activeReservations = reservations.filter(r => r.status !== "finished");
 
     return (
         <main>
-            {activeReservations.length === 0 ?
-                <h5>There are no reservations for this date</h5> :
+            {reservations.length === 0 ?
+                <h5>No reservations found</h5> :
                 <ol>
-                    {activeReservations.map(r => {
+                    {reservations.map(r => {
                         return (
                             <li key={r.reservation_id}>
                                 <p>{r.first_name} {r.last_name}</p>
@@ -34,11 +32,6 @@ function ListReservations({ reservations, date }) {
                     })}
                 </ol>
             }
-            <div className="my-5">
-                <button type="button" className="btn btn-secondary" onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
-                <button type="button" className="btn btn-primary" onClick={() => history.push("/dashboard")}>Today</button>
-                <button type="button" className="btn btn-secondary" onClick={() => history.push(`/dashboard?date=${next(date)}`)}>Next</button>
-            </div>
         </main>
     )
 }

@@ -1,10 +1,18 @@
 const knex = require("../db/connection");
 
-function list(date) {
-    return knex("reservations")
-        .select("*")
-        .where({ "reservation_date": date })
-        .orderBy("reservation_time");
+function list(date, phone) {
+    if (date) {
+        return knex("reservations")
+            .select("*")
+            .where({ "reservation_date": date })
+            .orderBy("reservation_time");
+    } else if (phone) {
+        return knex("reservations")
+            .select("*")
+            .whereRaw("translate(mobile_number, '()-', '') like ?", `%${phone.replace(/\D/g, "")}%`)
+            .orderBy("reservation_date");
+    }
+
 }
 
 function create(newReservation) {

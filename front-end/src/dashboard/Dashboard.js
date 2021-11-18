@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
+import { useLocation, useHistory, Route, Switch } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
+import { next, previous } from "../utils/date-time";
 import ListReservations from "../reservations/ListReservations";
 import ListTables from "../tables/ListTables";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -18,6 +19,7 @@ function _useQuery() {
 }
 
 function Dashboard({ date }) {
+  const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
@@ -52,8 +54,13 @@ function Dashboard({ date }) {
             <h4 className="mb-0">Reservations for date: {date}</h4>
           </div>
           <ErrorAlert error={reservationsError} />
+          <ListReservations reservations={reservations} />
+          <div className="my-5">
+            <button type="button" className="btn btn-secondary" onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
+            <button type="button" className="btn btn-primary" onClick={() => history.push("/dashboard")}>Today</button>
+            <button type="button" className="btn btn-secondary" onClick={() => history.push(`/dashboard?date=${next(date)}`)}>Next</button>
+          </div>
           <ErrorAlert error={tablesError} />
-          <ListReservations reservations={reservations} date={date} />
           <ListTables tables={tables} reservations={reservations} />
         </main>
       </Route>

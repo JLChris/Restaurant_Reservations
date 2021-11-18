@@ -1,5 +1,5 @@
 import React from "react";
-import { updateTable, updateReservation, listTables } from "../utils/api";
+import { updateTable, updateReservation } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 function ListTables({ tables, reservations }) {
