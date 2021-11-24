@@ -10,6 +10,7 @@ exports.up = function (knex) {
             .references("reservation_id")
             .inTable("reservations")
             .onDelete("cascade");
+        table.string("status").defaultTo("Free");
         table.timestamps(true, true);
     });
 };
