@@ -18,8 +18,22 @@ function update(tableId, params) {
         });
 }
 
+function read(tableId) {
+    return knex("tables")
+        .where({ "table_id": tableId })
+        .first();
+}
+
+function readReservation(resId) {
+    return knex("reservations")
+        .where({ "reservation_id": resId })
+        .first();
+}
+
 module.exports = {
     create,
     list,
-    update
+    update,
+    read,
+    readReservation
 }

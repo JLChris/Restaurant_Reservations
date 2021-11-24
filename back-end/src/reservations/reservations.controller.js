@@ -6,10 +6,32 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const requiredFields = ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"];
 
+function isValidTime(value) {
+  var hasMeridian = false;
+  var re = /^\d{1,2}[:]\d{2}([:]\d{2})?( [aApP][mM]?)?$/;
+  if (!re.test(value)) { return false; }
+  if (value.toLowerCase().indexOf("p") != -1) { hasMeridian = true; }
+  if (value.toLowerCase().indexOf("a") != -1) { hasMeridian = true; }
+  var values = value.split(":");
+  if ((parseFloat(values[0]) < 0) || (parseFloat(values[0]) > 23)) { return false; }
+  if (hasMeridian) {
+    if ((parseFloat(values[0]) < 1) || (parseFloat(values[0]) > 12)) { return false; }
+  }
+  if ((parseFloat(values[1]) < 0) || (parseFloat(values[1]) > 59)) { return false; }
+  if (values.length > 2) {
+    if ((parseFloat(values[2]) < 0) || (parseFloat(values[2]) > 59)) { return false; }
+  }
+  return true;
+}
+
 function hasRequiredFields(req, res, next) {
+  const data = req.body.data;
   const keys = [];
   const missingFields = [];
-  for (let key in req.body.data) {
+  for (let key in data) {
+    if (!requiredFields.includes(key)) {
+      missingFields.push(key);
+    }
     keys.push(key);
   }
   requiredFields.forEach(field => {
@@ -18,7 +40,37 @@ function hasRequiredFields(req, res, next) {
     }
   });
   if (missingFields.length === 0) {
-    res.locals.reservation = req.body.data;
+    res.locals.reservation = data;
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Body is missing the following properties: ${missingFields.join(", ")}`
+  });
+}
+
+function validateFields(req, res, next) {
+  const data = req.body.data;
+  const missingFields = [];
+  if (!data.first_name || data.first_name.length < 1) {
+    missingFields.push("first_name")
+  }
+  if (!data.last_name || data.last_name.length < 1) {
+    missingFields.push("last_name");
+  }
+  if (!data.mobile_number || data.mobile_number.length < 1) {
+    missingFields.push("mobile_number");
+  }
+  if (!data.reservation_date || data.reservation_date.length < 1 || !Date.parse(data.reservation_date)) {
+    missingFields.push("reservation_date");
+  }
+  if (!data.reservation_time || data.reservation_time.length < 1 || !isValidTime(data.reservation_time)) {
+    missingFields.push("reservation_time");
+  }
+  if (!data.people || data.people === 0 || typeof data.people !== "number") {
+    missingFields.push("people");
+  }
+  if (missingFields.length === 0) {
     return next();
   }
   next({
@@ -36,7 +88,7 @@ function validDateAndTime(req, res, next) {
     errors.push("The restaurant is closed on Tuesdays. Please pick a different day.");
   }
   if (date - today < 0) {
-    errors.push("Cannot book a past date.")
+    errors.push("Please pick a date in the future.")
   }
   if (date.getHours() <= 10) {
     if (date.getHours() === 10 && date.getMinutes() < 30) {
@@ -82,7 +134,7 @@ async function list(req, res) {
 async function create(req, res) {
   const newReservation = res.locals.reservation;
   const data = await service.create(newReservation);
-  res.status(201).json({ data });
+  res.status(201).json({ data: data[0] });
 }
 
 function read(req, res) {
@@ -99,7 +151,7 @@ async function update(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasRequiredFields, validDateAndTime, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, validateFields, validDateAndTime, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
   update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)]
 };

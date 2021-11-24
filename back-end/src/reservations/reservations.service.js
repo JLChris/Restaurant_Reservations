@@ -16,7 +16,9 @@ function list(date, phone) {
 }
 
 function create(newReservation) {
-    return knex("reservations").insert(newReservation).returning("*");
+    return knex("reservations")
+        .insert(newReservation)
+        .returning("*");
 }
 
 function read(resId) {
