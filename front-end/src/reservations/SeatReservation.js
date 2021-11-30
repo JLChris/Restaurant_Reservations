@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { readReservation, updateTable, updateReservation } from "../utils/api";
+import { readReservation, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function SeatReservation({ tables, date }) {
+function SeatReservation({ tables }) {
     const params = useParams();
     const history = useHistory();
 
@@ -38,10 +38,7 @@ function SeatReservation({ tables, date }) {
             setError({ message: `${table.table_name} cannot accommodate party size. Please pick a different table.` })
         }
         else {
-            updateTable(table.table_id, { reservation_id: reservationId, status: "Occupied", people: reservation.people })
-                .then(() => {
-                    updateReservation(reservationId, { status: "seated" });
-                })
+            updateTable(table.table_id, reservation.reservation_id)
                 .then(() => {
                     history.goBack();
                 })

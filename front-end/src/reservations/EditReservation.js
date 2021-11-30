@@ -1,25 +1,31 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { readReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function NewReservation() {
+function EditReservation() {
     const history = useHistory();
+    const params = useParams();
 
-    const initialFormState = {
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: 1
-    };
-    const [reservation, setReservation] = useState({ ...initialFormState });
     const [error, setError] = useState(null);
+    const [formData, setFormData] = useState({});
+
+
+    const reservationId = Number(params.reservation_id);
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        setError(null);
+        setFormData({});
+        readReservation(reservationId, abortController.signal)
+            .then(setFormData)
+            .catch(setError);
+        return () => abortController.abort();
+    }, [reservationId]);
 
     const changeHandler = ({ target }) => {
-        setReservation({
-            ...reservation,
+        setFormData({
+            ...formData,
             [target.name]: target.value,
         });
     };
@@ -30,16 +36,17 @@ function NewReservation() {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        createReservation({ ...reservation, status: "booked" })
+        updateReservation(reservationId, formData)
             .then(() => {
-                history.push(`/dashboard?date=${reservation.reservation_date}`);
+                history.push(`/dashboard?date=${formData.reservation_date}`);
             })
             .catch(setError);
     }
 
+
     return (
         <>
-            <h1>Create Reservation</h1>
+            <h1>Edit Reservation</h1>
             <ErrorAlert error={error} />
             <form onSubmit={submitHandler}>
                 <div className="mb-3">
@@ -50,7 +57,7 @@ function NewReservation() {
                         className="form-control"
                         id="first_name"
                         placeholder="John"
-                        value={reservation.first_name}
+                        value={formData.first_name}
                         onChange={changeHandler}
                         required
                     />
@@ -63,7 +70,7 @@ function NewReservation() {
                         className="form-control"
                         id="last_name"
                         placeholder="Smith"
-                        value={reservation.last_name}
+                        value={formData.last_name}
                         onChange={changeHandler}
                         required
                     />
@@ -77,7 +84,7 @@ function NewReservation() {
                         id="mobile_number"
                         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         placeholder="xxx-xxx-xxxx"
-                        value={reservation.mobile_number}
+                        value={formData.mobile_number}
                         onChange={changeHandler}
                         required
                     />
@@ -91,7 +98,7 @@ function NewReservation() {
                         id="reservation_date"
                         pattern="\d{4}-\d{2}-\d{2}"
                         placeholder="YYYY-MM-DD"
-                        value={reservation.reservation_date}
+                        value={formData.reservation_date}
                         onChange={changeHandler}
                         required
                     />
@@ -105,7 +112,7 @@ function NewReservation() {
                         id="reservation_time"
                         pattern="[0-9]{2}:[0-9]{2}"
                         placeholder="HH:MM"
-                        value={reservation.reservation_time}
+                        value={formData.reservation_time}
                         onChange={changeHandler}
                         required
                     />
@@ -118,7 +125,7 @@ function NewReservation() {
                         className="form-control"
                         id="people"
                         min="1"
-                        value={reservation.people}
+                        value={formData.people}
                         onChange={changeHandler}
                         required
                     />
@@ -132,5 +139,4 @@ function NewReservation() {
     )
 }
 
-
-export default NewReservation;
+export default EditReservation;

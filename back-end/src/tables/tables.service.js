@@ -10,12 +10,23 @@ function list() {
         .orderBy("table_name");
 }
 
-function update(tableId, params) {
+function update(tableId, resId) {
     return knex("tables")
         .where({ "table_id": tableId })
         .update({
-            ...params
-        });
+            reservation_id: resId,
+            status: "Occupied"
+        })
+        .returning("*");
+}
+
+function updateReservation(resId, newStatus) {
+    return knex("reservations")
+        .where({ "reservation_id": resId })
+        .update({
+            status: newStatus
+        })
+        .returning("*");
 }
 
 function read(tableId) {
@@ -30,10 +41,18 @@ function readReservation(resId) {
         .first();
 }
 
+function destroy(table) {
+    return knex("tables")
+        .where({ "table_id": table.table_id })
+        .del();
+}
+
 module.exports = {
     create,
     list,
     update,
     read,
-    readReservation
+    readReservation,
+    delete: destroy,
+    updateReservation,
 }

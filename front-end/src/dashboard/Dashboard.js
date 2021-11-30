@@ -6,6 +6,7 @@ import ListReservations from "../reservations/ListReservations";
 import ListTables from "../tables/ListTables";
 import ErrorAlert from "../layout/ErrorAlert";
 import SeatReservation from "../reservations/SeatReservation";
+import EditReservation from "../reservations/EditReservation";
 
 /**
  * Defines the dashboard page.
@@ -61,11 +62,14 @@ function Dashboard({ date }) {
             <button type="button" className="btn btn-secondary" onClick={() => history.push(`/dashboard?date=${next(date)}`)}>Next</button>
           </div>
           <ErrorAlert error={tablesError} />
-          <ListTables tables={tables} reservations={reservations} />
+          <ListTables tables={tables} />
         </main>
       </Route>
       <Route path="/reservations/:reservation_id/seat">
-        <SeatReservation tables={tables} date={date} />
+        <SeatReservation tables={tables} />
+      </Route>
+      <Route path="/reservations/:reservation_id/edit">
+        <EditReservation />
       </Route>
     </Switch>
 

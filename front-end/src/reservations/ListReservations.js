@@ -1,8 +1,21 @@
 import React from "react";
-
+import { updateReservationStatus } from "../utils/api";
+import { useHistory } from "react-router-dom";
 
 function ListReservations({ reservations }) {
-    // const activeReservations = reservations.filter(r => r.status !== "finished");
+    const history = useHistory();
+
+    const cancelReservation = (resId) => {
+        const message = "Do you want to cancel this reservation? This cannot be undone.";
+        const response = window.confirm(message);
+        if (response) {
+            updateReservationStatus(resId, "cancelled")
+                .then(() => {
+                    history.go();
+                })
+                .catch(console.log);
+        }
+    }
 
     return (
         <main>
@@ -18,13 +31,28 @@ function ListReservations({ reservations }) {
                                 <p>Party Size: {r.people}</p>
                                 <p data-reservation-id-status={r.reservation_id}>{r.status}</p>
                                 {r.status === "booked" ?
-                                    <a href={`/reservations/${r.reservation_id}/seat`}>
+                                    <div>
+                                        <a href={`/reservations/${r.reservation_id}/seat`}>
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary">
+                                                Seat
+                                            </button>
+                                        </a>
+                                        <a href={`/reservations/${r.reservation_id}/edit`}>
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary">
+                                                Edit
+                                            </button>
+                                        </a>
                                         <button
                                             type="button"
-                                            className="btn btn-secondary">
-                                            Seat
-                                        </button>
-                                    </a>
+                                            className="btn btn-danger"
+                                            data-reservation-id-cancel={r.reservation_id}
+                                            onClick={() => cancelReservation(r.reservation_id)}
+                                        >Cancel</button>
+                                    </div>
                                     : ""
                                 }
                             </li>

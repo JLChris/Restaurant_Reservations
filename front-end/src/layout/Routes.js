@@ -41,6 +41,9 @@ function Routes() {
       <Route path="/reservations/:reservation_id/seat">
         <Dashboard date={today()} />
       </Route>
+      <Route path="/reservations/:reservation_id/edit">
+        <Dashboard date={today()} />
+      </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>

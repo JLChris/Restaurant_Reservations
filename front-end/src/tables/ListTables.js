@@ -1,19 +1,15 @@
 import React from "react";
-import { updateTable, updateReservation } from "../utils/api";
+import { deleteTable } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
-function ListTables({ tables, reservations }) {
+function ListTables({ tables }) {
     const history = useHistory();
 
-    const finishTable = (table) => {
-        const reservation = reservations.find(r => table.reservation_id === r.reservation_id);
+    const finishTable = (tableId) => {
         const message = "Is this table ready to seat new guests? This cannot be undone.";
         const response = window.confirm(message);
         if (response) {
-            updateTable(table.table_id, { reservation_id: null, status: "Free" })
-                .then(() => {
-                    updateReservation(reservation.reservation_id, { status: "finished" });
-                })
+            deleteTable(tableId)
                 .then(() => {
                     history.go();
                 })
@@ -35,7 +31,7 @@ function ListTables({ tables, reservations }) {
                                         className="btn btn-secondary"
                                         data-table-id-finish={t.table_id}
                                         onClick={() => {
-                                            finishTable(t)
+                                            finishTable(t.table_id)
                                         }}
                                     >Finish</button>
                                     : ""

@@ -5,6 +5,7 @@ function list(date, phone) {
         return knex("reservations")
             .select("*")
             .where({ "reservation_date": date })
+            .whereNot({ "status": "finished" })
             .orderBy("reservation_time");
     } else if (phone) {
         return knex("reservations")
@@ -33,7 +34,8 @@ function update(resId, params) {
         .where({ "reservation_id": resId })
         .update({
             ...params
-        });
+        })
+        .returning("*");
 }
 
 module.exports = {
