@@ -41,9 +41,9 @@ function readReservation(resId) {
         .first();
 }
 
-function destroy(table) {
+function destroy(tableId) {
     return knex("tables")
-        .where({ "table_id": table.table_id })
+        .where({ "table_id": tableId })
         .del();
 }
 
