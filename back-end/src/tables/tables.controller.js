@@ -18,7 +18,7 @@ function validateData(req, res, next) {
     if (!data.table_name || data.table_name.length < 2) {
         errors.push("Request body is missing a 'table_name' key.")
     }
-    if (!data.capacity || data.capacity === 0 || typeof Number(data.capacity) !== "number") {
+    if (!data.capacity || data.capacity === 0 || typeof data.capacity !== "number") {
         errors.push("Request body is missing a 'capacity' key.")
     }
     if (errors.length === 0) {

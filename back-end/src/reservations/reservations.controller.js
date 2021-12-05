@@ -61,7 +61,7 @@ function validateFields(req, res, next) {
   if (!data.reservation_time || data.reservation_time.length < 1 || !isValidTime(data.reservation_time)) {
     errors.push("Body is missing a valid reservation_time");
   }
-  if (!data.people || data.people === 0 || typeof Number(data.people) !== "number") {
+  if (!data.people || data.people === 0 || typeof data.people !== "number") {
     errors.push("Body is missing a valid value for 'people'");
   }
   if (data.status === "seated" || data.status === "finished") {
