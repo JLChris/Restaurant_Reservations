@@ -22,6 +22,7 @@ function NewReservation() {
             ...reservation,
             [target.name]: target.value,
         });
+        console.log(reservation.people);
     };
 
     const cancelHandler = () => {
@@ -30,6 +31,7 @@ function NewReservation() {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        reservation.people = Number(reservation.people);
         createReservation({ ...reservation, status: "booked" })
             .then(() => {
                 history.push(`/dashboard?date=${reservation.reservation_date}`);

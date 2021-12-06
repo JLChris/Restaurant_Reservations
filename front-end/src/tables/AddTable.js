@@ -27,6 +27,7 @@ function AddTable() {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        table.capacity = Number(table.capacity);
         createTable(table)
             .then(() => {
                 history.push("/dashboard");
@@ -60,7 +61,6 @@ function AddTable() {
                         name="capacity"
                         className="form-control"
                         id="capacity"
-                        placeholder="1"
                         min="1"
                         value={table.capacity}
                         onChange={changeHandler}
