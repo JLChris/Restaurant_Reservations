@@ -2,7 +2,7 @@ import React from "react";
 import { deleteTable } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
-function ListTables({ tables }) {
+function ListTables({ tables, loadDashboard }) {
     const history = useHistory();
 
     const finishTable = (tableId) => {
@@ -11,7 +11,7 @@ function ListTables({ tables }) {
         if (response) {
             deleteTable(tableId)
                 .then(() => {
-                    history.go();
+                    loadDashboard();
                 })
                 .catch(console.log);
         }
@@ -19,16 +19,17 @@ function ListTables({ tables }) {
 
     return (
         <main>
+            <h4>Tables</h4>
             {tables.length === 0 ? "" :
                 <ul>
                     {tables.map(t => {
                         return (
                             <li key={t.table_id} className="mb-3">
-                                <p>{t.table_name} - <span data-table-id-status={t.table_id}>{t.status}</span> </p>
+                                <p className="d-inline">{t.table_name} - <span data-table-id-status={t.table_id}>{t.status}</span> </p>
                                 {t.status === "Occupied"
                                     ? <button
                                         type="button"
-                                        className="btn btn-secondary"
+                                        className="btn btn-warning ml-2 py-0"
                                         data-table-id-finish={t.table_id}
                                         onClick={() => {
                                             finishTable(t.table_id)

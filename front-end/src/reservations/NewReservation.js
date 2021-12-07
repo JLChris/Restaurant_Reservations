@@ -22,7 +22,6 @@ function NewReservation() {
             ...reservation,
             [target.name]: target.value,
         });
-        console.log(reservation.people);
     };
 
     const cancelHandler = () => {
