@@ -24,20 +24,22 @@ function Search() {
 
     return (
         <>
+            <h1 className="mb-3">Search</h1>
             <form onSubmit={submitHandler} className="mb-5">
-                <div className="mb-3">
-                    <label htmlFor="mobile_number" className="form-label">Search</label>
-                    <input
-                        type="tel"
-                        name="mobile_number"
-                        className="form-control"
-                        id="mobile_number"
-                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="Enter a customer's phone number"
-                        value={mobile_number}
-                        onChange={changeHandler}
-                        required
-                    />
+                <div className="row mb-3">
+                    <div className="col-sm-10">
+                        <input
+                            type="tel"
+                            name="mobile_number"
+                            className="form-control w-25"
+                            id="mobile_number"
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                            placeholder="Enter a customer's phone number"
+                            value={mobile_number}
+                            onChange={changeHandler}
+                            required
+                        />
+                    </div>
                 </div>
                 <button type="submit" className="btn btn-primary">Find</button>
             </form>

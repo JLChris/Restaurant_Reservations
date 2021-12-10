@@ -42,8 +42,8 @@ function NewReservation() {
         <>
             <h1>Create Reservation</h1>
             <ErrorAlert error={error} />
-            <form onSubmit={submitHandler}>
-                <div className="mb-3">
+            <form className="row g-3" onSubmit={submitHandler}>
+                <div className="col-md-6 mb-3">
                     <label htmlFor="first_name" className="form-label">First Name</label>
                     <input
                         type="text"
@@ -56,7 +56,7 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-6">
                     <label htmlFor="last_name" className="form-label">Last Name</label>
                     <input
                         type="text"
@@ -69,12 +69,12 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div className="mb-3">
+                <div className="col-12 mb-3">
                     <label htmlFor="mobile_number" className="form-label">Mobile Number</label>
                     <input
                         type="tel"
                         name="mobile_number"
-                        className="form-control"
+                        className="form-control w-25"
                         id="mobile_number"
                         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         placeholder="xxx-xxx-xxxx"
@@ -83,7 +83,7 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-2 mb-3">
                     <label htmlFor="reservation_date" className="form-label">Date of Reservation</label>
                     <input
                         type="date"
@@ -97,7 +97,7 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-2">
                     <label htmlFor="reservation_time" className="form-label">Time of Reservation</label>
                     <input
                         type="time"
@@ -111,12 +111,12 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div className="mb-3">
+                <div className="col-2 mb-3">
                     <label htmlFor="people" className="form-label">Party Size</label>
                     <input
                         type="number"
                         name="people"
-                        className="form-control"
+                        className="form-control w-25"
                         id="people"
                         min="1"
                         value={reservation.people}
@@ -124,8 +124,8 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="col-12">
+                    <button type="submit" className="btn btn-primary mr-3">Submit</button>
                     <button type="button" className="btn btn-danger" onClick={cancelHandler}>Cancel</button>
                 </div>
             </form>
