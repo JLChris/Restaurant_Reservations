@@ -45,7 +45,7 @@ function AddTable() {
                     <input
                         type="text"
                         name="table_name"
-                        className="form-control"
+                        className="form-control w-25"
                         id="table_name"
                         placeholder="#1"
                         minLength="2"
@@ -55,11 +55,11 @@ function AddTable() {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="capacity" className="form-label">capacity</label>
+                    <label htmlFor="capacity" className="form-label">Capacity:</label>
                     <input
                         type="number"
                         name="capacity"
-                        className="form-control"
+                        className="form-control w-25"
                         id="capacity"
                         min="1"
                         value={table.capacity}
@@ -68,7 +68,7 @@ function AddTable() {
                     />
                 </div>
                 <div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary mr-3">Submit</button>
                     <button type="button" className="btn btn-danger" onClick={cancelHandler}>Cancel</button>
                 </div>
             </form>
