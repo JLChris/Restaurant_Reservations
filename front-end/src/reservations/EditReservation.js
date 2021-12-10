@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { readReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function EditReservation() {
+function EditReservation({ loadDashboard }) {
     const history = useHistory();
     const params = useParams();
 
@@ -36,8 +36,10 @@ function EditReservation() {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        formData.people = Number(formData.people);
         updateReservation(reservationId, formData)
             .then(() => {
+                loadDashboard();
                 history.push(`/dashboard?date=${formData.reservation_date}`);
             })
             .catch(setError);

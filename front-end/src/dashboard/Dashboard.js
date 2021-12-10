@@ -55,7 +55,7 @@ function Dashboard({ date }) {
             <h4 className="mb-0">Reservations for date: {date}</h4>
           </div>
           <ErrorAlert error={reservationsError} />
-          <ListReservations reservations={reservations} />
+          <ListReservations reservations={reservations} loadDashboard={loadDashboard} />
           <div className="my-5">
             <button type="button" className="btn btn-secondary mx-2" onClick={() => history.push(`/dashboard?date=${previous(date)}`)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-calendar-minus" viewBox="0 0 16 16">
               <path d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z" />
@@ -75,7 +75,7 @@ function Dashboard({ date }) {
         <SeatReservation tables={tables} loadDashboard={loadDashboard} />
       </Route>
       <Route path="/reservations/:reservation_id/edit">
-        <EditReservation />
+        <EditReservation loadDashboard={loadDashboard} />
       </Route>
     </Switch>
 

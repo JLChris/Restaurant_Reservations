@@ -1,9 +1,7 @@
 import React from "react";
 import { deleteTable } from "../utils/api";
-import { useHistory } from "react-router-dom";
 
 function ListTables({ tables, loadDashboard }) {
-    const history = useHistory();
 
     const finishTable = (tableId) => {
         const message = "Is this table ready to seat new guests? This cannot be undone.";

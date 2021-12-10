@@ -1,9 +1,7 @@
 import React from "react";
 import { updateReservationStatus } from "../utils/api";
-import { useHistory } from "react-router-dom";
 
-function ListReservations({ reservations }) {
-    const history = useHistory();
+function ListReservations({ reservations, loadDashboard }) {
 
     const cancelReservation = (resId) => {
         const message = "Do you want to cancel this reservation? This cannot be undone.";
@@ -11,7 +9,7 @@ function ListReservations({ reservations }) {
         if (response) {
             updateReservationStatus(resId, "cancelled")
                 .then(() => {
-                    history.go();
+                    loadDashboard();
                 })
                 .catch(console.log);
         }
