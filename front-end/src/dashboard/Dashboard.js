@@ -68,7 +68,7 @@ function Dashboard({ date }) {
             </svg></button>
           </div>
           <ErrorAlert error={tablesError} />
-          <ListTables tables={tables} loadDashboard={loadDashboard} />
+          <ListTables tables={tables} loadDashboard={loadDashboard} setTablesError={setTablesError} />
         </main>
       </Route>
       <Route path="/reservations/:reservation_id/seat">

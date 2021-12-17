@@ -1,7 +1,7 @@
 import React from "react";
 import { deleteTable } from "../utils/api";
 
-function ListTables({ tables, loadDashboard }) {
+function ListTables({ tables, loadDashboard, setTablesError }) {
 
     const finishTable = (tableId) => {
         const message = "Is this table ready to seat new guests? This cannot be undone.";
@@ -11,7 +11,7 @@ function ListTables({ tables, loadDashboard }) {
                 .then(() => {
                     loadDashboard();
                 })
-                .catch(console.log);
+                .catch(setTablesError);
         }
     }
 
